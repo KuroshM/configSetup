@@ -11,7 +11,7 @@ fi
 for f in bash $(cat "$dir"/config.txt)
 do
   # if app is installed
-  if dpkg -s $f &>/dev/null
+  if command -v $f &>/dev/null
   then
     # if app already has an old configuaration, do not configure
     if ls "$dir"/old/"$f"rc.old* &>/dev/null

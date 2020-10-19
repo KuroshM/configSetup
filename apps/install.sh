@@ -3,7 +3,7 @@ echo Updating app catalogue ...
 sudo apt -qq update &>/dev/null
 
 dir=$(dirname "$0")
-logdir=f dpkg -s $f &>/dev/null"$dir"/../logs
+logdir="$dir"/../logs
 # install the app(s) if not already installed
 if [ "$#" -eq 0 ]
 then
@@ -14,7 +14,7 @@ fi
 
 for f in $appList 
 do
-  if dpkg -s $f &>/dev/null
+  if command -v $f &>/dev/null
   then
     echo $f is already installed.
   else
