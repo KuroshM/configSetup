@@ -1,9 +1,9 @@
-# uninstall all apps installed by myConfig and listed in log.log
-dir=$(dirname "$0")
-if ls "$dir"/log.log &>/dev/null
+# uninstall all apps installed by myConfig and listed in install.log
+dir=$(dirname "$0")/../logs
+if ls "$dir"/install.log &>/dev/null
 then
-  apps=$(cat "$dir"/log.log)
-  rm "$dir"/log.log
+  apps=$(cat "$dir"/install.log)
+  rm "$dir"/install.log
   
   for f in $apps 
   do
@@ -13,7 +13,7 @@ then
       echo $f uninstalled.
     else
       echo $f could not be uninstalled.
-      echo $f>>"$dir"/log.log -gc
+      echo $f>>"$dir"/install.log
     fi
   done
 else

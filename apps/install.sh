@@ -2,7 +2,7 @@
 echo Updating app catalogue ...
 sudo apt -qq update &>/dev/null
 
-dir=$(dirname "$0")
+dir=$(dirname "$0")/../logs
 # install the app(s) if not already installed
 if [ "$#" -eq 0 ]
 then
@@ -21,7 +21,7 @@ do
     if sudo apt install -qqy $f &>/dev/null
     then
       echo $f installed.
-      echo $f>>"$dir"/log.log 
+      echo $f>>"$dir"/install.log
     else
       echo $f could not be installed.
     fi
