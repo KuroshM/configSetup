@@ -5,11 +5,10 @@ dir=$(dirname "$0")
 # If user is a sudoer, install apps
 if groups | grep "\<sudo\>" -q
 then
-#  "$dir"/apps/install.sh
-echo skipping
+  "$dir"/apps/install.sh
 fi
 
-for f in bash $(cat "$dir"/apps/list.txt)
+for f in bash $(cat "$dir"/config.txt)
 do
   # if app is installed
   if dpkg -s $f &>/dev/null
@@ -30,7 +29,11 @@ do
         # otherwise, create a dummy old file to signal that app is already configured
 	touch "$dir"/old/"$f"rc.old.empty
       fi
-      # create the configuration file as to source the relevant files
+      # create the configuration file to source the relevant files
+      # the next line provides the absolute path to relevant files
+      absDir="$( cd "$dir" &>/dev/null ; pwd -P )"
+      echo source "$absDir"/"$f"/"$f"rc > ~/."$f"rc
+      echo source "$absDir"/"$f"/local_"$f"rc >> ~/."$f"rc
       echo $f>>"$dir"/logs/config.log
     fi
   fi
