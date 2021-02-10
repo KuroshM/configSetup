@@ -1,0 +1,133 @@
+" ***************************************************************
+" PLUGINS
+call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'preservim/nerdtree'
+Plug 'Valloric/YouCompleteMe'
+Plug 'mattn/emmet-vim'
+Plug 'kshenoy/vim-signature'
+call plug#end()
+
+" ***************************************************************
+" General settings: indentation, line numbers, etc
+
+" set leader key
+let mapleader="\<Space>"
+let maplocalleader=","
+
+" set history size
+set history=1000
+
+" set the status line
+set statusline=%.50F
+set statusline+=%=
+set statusline+=%l
+set statusline+=/
+set statusline+=%L
+
+" enable syntax highlighting
+syntax on
+
+" no error bell sound
+set belloff=all
+
+" show line numbers (relative numbers)
+set number relativenumber
+
+" set tabs to have 2 spaces
+set tabstop=2 softtabstop=2
+
+" indent when moving to the next line while writing code
+set autoindent
+
+" expand tabs into spaces
+set expandtab
+
+" when using the >> or << commands, shift lines by 2 spaces
+set shiftwidth=2
+
+" avoid long lines from wrapping
+set nowrap
+
+" show a visual line under the cursor's current line
+set cursorline
+
+" show the matching part of the pair for [] {} and ()
+set showmatch
+
+" do not create swap files
+set noswapfile
+
+" do not create a backup file
+set nobackup
+
+" set an undo file and directory
+set undodir=~/.vim/undodir
+set undofile
+
+" show search results as you type
+set incsearch
+
+" activate the menu for choosing options of command
+set wildmenu
+
+" create a colored column to show a desired width
+""set colorcolumn=81  "active on all lines
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 100) "active only if line exceeds 80 chars
+
+" Uncomment the following to have Vim jump to the last position when reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+" use different characters to visualize tabs, trailing spces, and non-breaking spaces
+" set listchars=trail:\uBB
+" set list
+
+" enable all Python syntax highlighting features
+let python_highlight_all = 1
+
+" ***************************************************************
+" key remapping
+inoremap jk <Esc>
+
+" move current line up/down using Alt key
+nnoremap <C-k> ddkkp
+nnoremap <C-j> ddp
+
+" add empty line above
+nnoremap <C-h> O<Esc>j
+
+" clearing search
+nnoremap <C-l> :nohl<CR><C-l>:echo "Search Cleared"<CR>
+
+" activating spell checking
+map <F8> :setlocal spell! spelllang=en_us<CR>
+
+
+" ***************************************************************
+" PLUGIN SPECIFIC SETTINGS
+
+" NERDTree
+" open/close NERDTree
+nnoremap <C-t> :NERDTreeToggle<CR>
+
+" start NERDTree, unless a file or session is specified, eg. vim -S session_file.vim.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') && v:this_session == '' | NERDTree | endif
+
+" open the existing NERDTree on each new tab.
+autocmd BufWinEnter * silent NERDTreeMirror
+
+" exit if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" TEMPORARY
+nnoremap <F5> :source %<CR>
+inoremap <Esc> <nop>
+noremap <Right> <nop>
+noremap <Left> <nop>
+noremap <Up> <nop>
+noremap <Down> <nop>
