@@ -1,0 +1,12 @@
+#! /bin/bash
+
+absDir="$(cd $(dirname $0); pwd -P)"
+if ! ls ~/.bashrc &> /dev/null; then
+  ln -s "$absDir"/bashrc ~/.bashrc
+fi
+
+# Add bash to the list of configed apps
+log="$absDir"/../../logs/config.log
+if ! cat $log | grep -P '^bash$' &> /dev/null; then 
+  echo bash>>$log
+fi

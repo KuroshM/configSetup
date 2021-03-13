@@ -1,0 +1,30 @@
+#! /bin/bash
+
+dir=$(cd $(dirname "$0"); pwd -P)
+echo $dir
+
+# If user is a sudoer, install apps
+if groups | grep "\<sudo\>" -q; then
+  "$dir"/appInstall/install "$@"
+fi
+
+source "$dir"/dotFiles/dotfileLocations
+for f in ${!configFile[@]}; do
+  # if app already has an old configuaration, do not configure
+  if ls "$dir"/old/"$f".old* &>/dev/null; then
+    echo "$f" already configured.
+  else
+  # if not previously configured
+    echo Configuring "$f" ...
+    dotfile="${configFile[$f]}"
+    # if it already has a configuration file, back it up
+    if ls "$dotfile" &>/dev/null; then
+      echo Storing old configuration for "$f".
+      mv "$dotfile" "$dir"/old/"$f".old
+    else
+      # otherwise, create a dummy old file to signal that app is already configured
+      touch "$dir"/old/"$f".old.empty
+    fi
+    "$dir"/dotFiles/"$f"/setup
+  fi
+done

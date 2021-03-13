@@ -28,81 +28,73 @@ set statusline+=%L
 
 " enable syntax highlighting
 syntax on
-
 " no error bell sound
-set belloff=all
-
+set noeb vb t_vb=
 " show line numbers (relative numbers)
 set number relativenumber
-
 " set tabs to have 2 spaces
 set tabstop=2 softtabstop=2
-
 " indent when moving to the next line while writing code
 set autoindent
-
 " expand tabs into spaces
 set expandtab
-
 " when using the >> or << commands, shift lines by 2 spaces
 set shiftwidth=2
-
 " avoid long lines from wrapping
 set nowrap
-
 " show a visual line under the cursor's current line
 set cursorline
-
 " show the matching part of the pair for [] {} and ()
 set showmatch
-
 " do not create swap files
 set noswapfile
-
 " do not create a backup file
 set nobackup
-
 " set an undo file and directory
 set undodir=~/.vim/undodir
 set undofile
-
 " show search results as you type
 set incsearch
-
+" ignore case when searching
+set ignorecase
+" search case-sensitive if capital letters are typed
+set smartcase
 " activate the menu for choosing options of command
 set wildmenu
-
+" start scrolling when curser is # of lines above the bottom
+set scrolloff=8
 " create a colored column to show a desired width
 ""set colorcolumn=81  "active on all lines
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn', '\%81v', 100) "active only if line exceeds 80 chars
-
-" Uncomment the following to have Vim jump to the last position when reopening a file
+" Jump to the last position when reopening a file
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
-
 " use different characters to visualize tabs, trailing spces, and non-breaking spaces
 " set listchars=trail:\uBB
 " set list
 
 " enable all Python syntax highlighting features
 let python_highlight_all = 1
+" remove  trailing whitespace on save
+autocmd BufWritePre * %s/\s\+$//e
 
 " ***************************************************************
 " key remapping
 inoremap jk <Esc>
-
 " move current line up/down using Alt key
-nnoremap <C-k> ddkkp
-nnoremap <C-j> ddp
-
-" add empty line above
-nnoremap <C-h> O<Esc>j
-
+execute "set <M-j>=\ej"
+execute "set <M-k>=\ek"
+nnoremap <M-j> ddp
+nnoremap <M-k> ddkkp
+" add empty line above/below using Alt key
+execute "set <M-h>=\eh"
+execute "set <M-l>=\el"
+nnoremap <M-h> O<Esc>j
+nnoremap <M-l> o<Esc>k
 " clearing search
 nnoremap <C-l> :nohl<CR><C-l>:echo "Search Cleared"<CR>
-
 " activating spell checking
 map <F8> :setlocal spell! spelllang=en_us<CR>
 
@@ -113,17 +105,29 @@ map <F8> :setlocal spell! spelllang=en_us<CR>
 " NERDTree
 " open/close NERDTree
 nnoremap <C-t> :NERDTreeToggle<CR>
-
 " start NERDTree, unless a file or session is specified, eg. vim -S session_file.vim.
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') && v:this_session == '' | NERDTree | endif
-
 " open the existing NERDTree on each new tab.
 autocmd BufWinEnter * silent NERDTreeMirror
-
 " exit if NERDTree is the only window left.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
+" ***************************************************************
+" PROGRAM SPECIFIC SETTINGS
+" You can define mappings for certain filetypes by prepending :autocmd
+" Filetype {filetype} ..., and put that into your ~/.vimrc. But that gets
+" unwieldy as you add mappings and other settings for various filetypes.
+" Better put the :map commands into ~/.vim/ftplugin/{filetype}_mappings.vim.
+" (This requires that you have :filetype plugin on.)
+
+" Latex
+" compile
+autocmd FileType tex nnoremap <buffer> <F5> :w<CR> :silent! !pdflatex % >/dev/null 2>%:r.err <CR> :silent! redraw! <CR>
+autocmd FileType tex nnoremap <buffer> <F6> :!cmd.exe /C start %:r.pdf<CR><CR>
+
+
+" ***************************************************************
 " TEMPORARY
 nnoremap <F5> :source %<CR>
 inoremap <Esc> <nop>
@@ -131,3 +135,6 @@ noremap <Right> <nop>
 noremap <Left> <nop>
 noremap <Up> <nop>
 noremap <Down> <nop>
+
+
+

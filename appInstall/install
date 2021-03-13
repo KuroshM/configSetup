@@ -1,3 +1,5 @@
+#! /bin/bash
+
 # updating catalogue
 echo Updating app catalogue ...
 sudo apt -qq update &>/dev/null
@@ -5,22 +7,18 @@ sudo apt -qq update &>/dev/null
 dir=$(dirname "$0")
 logdir="$dir"/../logs
 # install the app(s) if not already installed
-if [ "$#" -eq 0 ]
-then
-  appList=$(cat "$dir"/list.txt "$dir"/../config.txt | sort -u)
-else
+if [ "$#" -gt 0 ] && [[ "$1" != '-min' ]] && [[ "$1" != '-max' ]]; then
   appList="$@"
+else
+  appList=$("$dir"/list "$@"| sort -u)
 fi
 
-for f in $appList 
-do
-  if command -v $f &>/dev/null
-  then
+for f in $appList; do
+  if command -v $f &>/dev/null; then
     echo $f is already installed.
   else
     echo installing $f ...
-    if sudo apt install -qqy $f &>/dev/null
-    then
+    if sudo apt install -qqy $f &>/dev/null; then
       echo $f installed.
       echo $f>>"$logdir"/install.log
     else

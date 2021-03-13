@@ -1,0 +1,12 @@
+#! /bin/bash
+
+if [[ $1 == '-min' ]]; then exit; fi
+
+echo tldr
+if ! command -v vim &> /dev/null && ! command -v nvim &> /dev/null; then
+  echo nvim
+fi
+
+if [[ $1 == '-max' ]]; then
+  echo 
+fi

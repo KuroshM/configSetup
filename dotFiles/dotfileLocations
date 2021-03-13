@@ -1,0 +1,25 @@
+#! /bin/bash
+function exists() {
+  command -v "$1" &> /dev/null
+  return $?
+}
+declare -A configFile
+
+configFile[bash]=~/.bashrc
+
+if exists zsh; then
+  configFile[zsh]=~/.zshrc
+fi
+
+if exists vim; then
+  configFile[vim]=~/.vimrc
+fi
+
+if exists nvim; then
+  configFile[nvim]=~/.config/nvim/init.vim
+  [[ -d ~/.config/nvim ]] || mkdir ~/.config/nvim
+fi
+
+if exists tmux; then
+  configFile[tmux]=~/.tmuxrc
+fi
