@@ -128,3 +128,6 @@ fi
 
 
 PS1="${red}Home:${green}\w${white}>"
+
+# remove possibility to scroll after clear
+alias clear='clear && printf "\033[3J"'
